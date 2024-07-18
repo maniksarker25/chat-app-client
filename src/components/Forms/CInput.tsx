@@ -15,8 +15,8 @@ const CInput = ({
   name,
   label,
   type = "text",
-  size = "medium",
-  fullWidth,
+  size = "small",
+  fullWidth = true,
   required,
   sx,
 }: TInputProps) => {
