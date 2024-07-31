@@ -6,10 +6,33 @@ import CForm from "@/components/Forms/CForm";
 import CInput from "@/components/Forms/CInput";
 import { FieldValues } from "react-hook-form";
 import Link from "next/link";
+import { registerUser } from "@/services/actions/registerUser";
+import { toast } from "sonner";
+import { loginUser } from "@/services/actions/loginUser";
+import { authKey } from "@/constants/auth";
 
 const RegisterPage = () => {
   const handleRegister = async (values: FieldValues) => {
-    console.log(values);
+    try {
+      const res = await registerUser(values);
+      if (res?.success) {
+        const result = await loginUser({
+          email: values.email,
+          password: values.password,
+        });
+        if (result?.success) {
+          toast.success("User login successfully");
+          localStorage.setItem(authKey, result?.data?.accessToken);
+          setAccessTokenToCookies(result?.data?.token, {
+            redirect: "/",
+          });
+        }
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
   return (
     <Container>
