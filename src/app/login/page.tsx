@@ -6,9 +6,33 @@ import { FieldValues } from "react-hook-form";
 import CForm from "@/components/Forms/CForm";
 import CInput from "@/components/Forms/CInput";
 import Link from "next/link";
+import { useState } from "react";
+import { loginUser } from "@/services/actions/loginUser";
+import { toast } from "sonner";
+import { storeUserInfo } from "@/services/authServices";
+import setAccessTokenToCookies from "@/services/actions/setAccessTokenToCookies";
+import { useRouter } from "next/navigation";
 const LoginPage = () => {
+  const router = useRouter();
+  const [error, setError] = useState("");
   const handleLogin = async (values: FieldValues) => {
-    console.log(values);
+    setError("");
+    try {
+      const res = await loginUser(values);
+      if (res?.success) {
+        storeUserInfo(res?.data?.accessToken);
+        setAccessTokenToCookies(res?.data?.accessToken, {
+          redirect: "/",
+        });
+        toast.success("User login successfully");
+
+        router.push("/");
+      } else {
+        setError(res?.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
   return (
     <Container>
@@ -70,6 +94,11 @@ const LoginPage = () => {
                       />
                     </Grid>
                   </Grid>
+                  {error && (
+                    <Box>
+                      <Typography color={"red"}>{error}</Typography>
+                    </Box>
+                  )}
                   <Button
                     fullWidth={true}
                     sx={{

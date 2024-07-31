@@ -1,3 +1,4 @@
+"use server";
 import { authKey } from "@/constants/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

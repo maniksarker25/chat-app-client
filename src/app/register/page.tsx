@@ -24,7 +24,7 @@ const RegisterPage = () => {
         if (result?.success) {
           toast.success("User login successfully");
           localStorage.setItem(authKey, result?.data?.accessToken);
-          setAccessTokenToCookies(result?.data?.token, {
+          setAccessTokenToCookies(result?.data?.accessToken, {
             redirect: "/",
           });
         } else {
