@@ -10,6 +10,7 @@ import { registerUser } from "@/services/actions/registerUser";
 import { toast } from "sonner";
 import { loginUser } from "@/services/actions/loginUser";
 import { authKey } from "@/constants/auth";
+import setAccessTokenToCookies from "@/services/actions/setAccessTokenToCookies";
 
 const RegisterPage = () => {
   const handleRegister = async (values: FieldValues) => {
@@ -26,6 +27,8 @@ const RegisterPage = () => {
           setAccessTokenToCookies(result?.data?.token, {
             redirect: "/",
           });
+        } else {
+          toast.error("User login failed");
         }
       } else {
         toast.error(res.message);
