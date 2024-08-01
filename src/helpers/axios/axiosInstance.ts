@@ -1,4 +1,5 @@
 import { authKey } from "@/constants/auth";
+import { IGenericErrorResponse } from "@/types";
 import { getFromLocalStorage } from "@/utils/localStorage";
 import axios from "axios";
 
@@ -25,15 +26,26 @@ instance.interceptors.request.use(
 
 // Add a response interceptor
 instance.interceptors.response.use(
+  //@ts-ignore
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
+    const responseObject = {
+      data: response?.data?.data,
+      meta: response?.data?.meta,
+    };
     return response;
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    return Promise.reject(error);
+    const responseObject: IGenericErrorResponse = {
+      statusCode: error?.response?.data?.statusCode || 500,
+      message: error?.response?.data?.message || "Something went wrong",
+      errorMessages: error?.response?.data?.errorMessages,
+    };
+    // return Promise.reject(error);
+    return responseObject;
   }
 );
 
