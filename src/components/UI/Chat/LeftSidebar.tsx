@@ -2,7 +2,11 @@ import { Avatar, Box, Stack } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MSModal from "@/components/Shared/MSModal/MSModal";
+import EditProfileModal from "./EditProfileModal";
+import { useState } from "react";
 const LeftSidebar = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return (
     <Stack direction={"row"}>
       <Box
@@ -39,12 +43,14 @@ const LeftSidebar = () => {
           </Stack>
           <Stack direction={"column"} alignItems={"center"}>
             <Avatar
+              onClick={() => setIsModalOpen(true)}
               alt="Remy Sharp"
               src="/static/images/avatar/1.jpg"
               sx={{
                 cursor: "pointer",
               }}
             />
+            <EditProfileModal open={isModalOpen} setOpen={setIsModalOpen} />
             <LogoutIcon
               sx={{
                 fontSize: "30px",
@@ -56,7 +62,7 @@ const LeftSidebar = () => {
           </Stack>
         </Stack>
       </Box>
-      <Box>second</Box>
+      <Box></Box>
     </Stack>
   );
 };

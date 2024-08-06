@@ -1,5 +1,5 @@
 "use client";
-import LeftSidebar from "@/components/Chat/LeftSidebar";
+import LeftSidebar from "@/components/UI/Chat/LeftSidebar";
 import { Box, Stack } from "@mui/material";
 import { usePathname } from "next/navigation";
 

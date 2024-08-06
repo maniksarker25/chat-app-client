@@ -1,4 +1,4 @@
-import ChatMessage from "@/components/Chat/ChatMessage";
+import ChatMessage from "@/components/UI/Chat/ChatMessage";
 import { Box } from "@mui/material";
 
 const Message = () => {
