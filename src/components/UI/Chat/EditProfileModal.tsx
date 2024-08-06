@@ -1,6 +1,7 @@
 import CForm from "@/components/Forms/CForm";
 import CInput from "@/components/Forms/CInput";
 import MSModal from "@/components/Shared/MSModal/MSModal";
+import { getUserInfo } from "@/services/authServices";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
@@ -11,6 +12,8 @@ type TProps = {
 };
 
 const EditProfileModal = ({ open, setOpen }: TProps) => {
+  const userInfo = getUserInfo();
+  console.log(userInfo);
   const handleUpdateProfile = () => {};
   return (
     <MSModal open={open} setOpen={setOpen} title={"Update Profile"}>

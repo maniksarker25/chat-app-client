@@ -6,7 +6,7 @@ export const storeUserInfo = (accessToken: string) => {
   return setToLocalStorage(authKey, accessToken);
 };
 
-export const getUserInfo = async () => {
+export const getUserInfo = () => {
   const authToken = getFromLocalStorage(authKey);
   console.log(authToken);
   if (authToken) {
