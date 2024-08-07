@@ -8,9 +8,9 @@ export const storeUserInfo = (accessToken: string) => {
 
 export const getUserInfo = () => {
   const authToken = getFromLocalStorage(authKey);
-  console.log(authToken);
   if (authToken) {
-    const decodedInfo = jwtDecode(authToken);
+    const decodedInfo: { id: string; email: string; iat: number; exp: number } =
+      jwtDecode(authToken);
     return decodedInfo;
   }
 };
