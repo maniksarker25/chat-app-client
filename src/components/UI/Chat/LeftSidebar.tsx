@@ -2,11 +2,12 @@ import { Avatar, Box, Stack } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import LogoutIcon from "@mui/icons-material/Logout";
-import MSModal from "@/components/Shared/MSModal/MSModal";
 import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
+import { useGetMyProfileQuery } from "@/redux/api/userApi";
 const LeftSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { data } = useGetMyProfileQuery(undefined);
   return (
     <Stack direction={"row"}>
       <Box
@@ -44,8 +45,8 @@ const LeftSidebar = () => {
           <Stack direction={"column"} alignItems={"center"}>
             <Avatar
               onClick={() => setIsModalOpen(true)}
-              alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              alt={data?.data?.name}
+              src={data?.data?.profile_pic}
               sx={{
                 cursor: "pointer",
               }}

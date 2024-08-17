@@ -2,11 +2,16 @@ import CForm from "@/components/Forms/CForm";
 import CInput from "@/components/Forms/CInput";
 import MSModal from "@/components/Shared/MSModal/MSModal";
 import { uploadFile } from "@/helpers/uploadFile/uploadFile";
-import { useGetMyProfileQuery } from "@/redux/api/userApi";
+import {
+  useGetMyProfileQuery,
+  useUpdateProfileMutation,
+} from "@/redux/api/userApi";
 import { getUserInfo } from "@/services/authServices";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
 
 type TProps = {
   open: boolean;
@@ -14,18 +19,34 @@ type TProps = {
 };
 
 const EditProfileModal = ({ open, setOpen }: TProps) => {
-  const [profileUrl, setProfileUrl] = useState(null);
-  const userInfo = getUserInfo();
+  const [profileUrl, setProfileUrl] = useState("");
+  const [updateProfile] = useUpdateProfileMutation();
 
-  const { data, isLoading } = useGetMyProfileQuery(userInfo?.id);
-  console.log(data?.data?.name);
+  const { data, isLoading } = useGetMyProfileQuery(undefined);
   const handleUploadFile = async (e: any) => {
     const file = e.target.files[0];
     const uploadedFile = await uploadFile(file);
     console.log(uploadedFile);
     setProfileUrl(uploadedFile?.url);
   };
-  const handleUpdateProfile = () => {};
+  const handleUpdateProfile = async (values: FieldValues) => {
+    const updatedValues = {
+      name: values.name,
+      profile_pic: profileUrl || data?.data?.profile_pic,
+    };
+    try {
+      const res = await updateProfile(updatedValues).unwrap();
+      console.log(res);
+      if (res?.success) {
+        toast.success("Profile updated successfully");
+        setOpen(false);
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
   return (
     <MSModal open={open} setOpen={setOpen} title={"Update Profile"}>
       <Box sx={{ minWidth: "300px" }}>
@@ -104,7 +125,7 @@ const EditProfileModal = ({ open, setOpen }: TProps) => {
               mt: "20px",
             }}
           >
-            <Button>Save Changes</Button>
+            <Button type="submit">Save Changes</Button>
           </Box>
         </CForm>
       </Box>
