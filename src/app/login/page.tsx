@@ -19,14 +19,15 @@ const LoginPage = () => {
     setError("");
     try {
       const res = await loginUser(values);
+      console.log(res);
       if (res?.success) {
         storeUserInfo(res?.data?.accessToken);
         setAccessTokenToCookies(res?.data?.accessToken, {
-          redirect: "/",
+          redirect: "/chat",
         });
         toast.success("User login successfully");
 
-        router.push("/");
+        router.push("/chat");
       } else {
         setError(res?.message);
       }

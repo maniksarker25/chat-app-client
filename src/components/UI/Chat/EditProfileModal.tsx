@@ -28,7 +28,7 @@ const EditProfileModal = ({ open, setOpen }: TProps) => {
   const handleUpdateProfile = () => {};
   return (
     <MSModal open={open} setOpen={setOpen} title={"Update Profile"}>
-      <Box>
+      <Box sx={{ minWidth: "300px" }}>
         <Box>
           <Box
             sx={{
