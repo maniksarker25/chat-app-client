@@ -9,6 +9,14 @@ const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["users"],
     }),
+    getAllUser: build.query({
+      query: (arg: Record<string, any>) => ({
+        url: `/user`,
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: ["users"],
+    }),
     updateProfile: build.mutation({
       query: (data) => ({
         url: "/user/update-profile",
@@ -20,4 +28,8 @@ const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetMyProfileQuery, useUpdateProfileMutation } = userApi;
+export const {
+  useGetMyProfileQuery,
+  useGetAllUserQuery,
+  useUpdateProfileMutation,
+} = userApi;

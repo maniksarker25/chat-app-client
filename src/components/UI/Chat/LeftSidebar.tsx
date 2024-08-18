@@ -5,8 +5,10 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
+import SearchUserModal from "./SearchUserModal";
 const LeftSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const { data } = useGetMyProfileQuery(undefined);
   const [allUser, setAllUser] = useState([]);
   return (
@@ -35,12 +37,17 @@ const LeftSidebar = () => {
               }}
             />
             <PersonAddAlt1Icon
+              onClick={() => setIsSearchModalOpen(true)}
               sx={{
                 mt: "15px",
                 fontSize: "30px",
                 color: "#374151",
                 cursor: "pointer",
               }}
+            />
+            <SearchUserModal
+              open={isSearchModalOpen}
+              setOpen={setIsSearchModalOpen}
             />
           </Stack>
           <Stack direction={"column"} alignItems={"center"}>
