@@ -1,12 +1,37 @@
 "use client";
 import LeftSidebar from "@/components/UI/Chat/LeftSidebar";
+import { authKey } from "@/constants/auth";
+import { useGetMyProfileQuery } from "@/redux/api/userApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setUser } from "@/redux/userSlice";
 import { Box, Stack } from "@mui/material";
 import { usePathname } from "next/navigation";
-
+import { useEffect } from "react";
+import io from "socket.io-client";
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const pathName = usePathname();
   const basePath = pathName === "/chat";
-  console.log(basePath);
+  const { data, refetch, isLoading } = useGetMyProfileQuery(undefined);
+  if (!isLoading) {
+    dispatch(setUser(data?.data && data?.data));
+  }
+
+  useEffect(() => {
+    refetch();
+  });
+  // socket connection
+  useEffect(() => {
+    const socketConnection = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, {
+      auth: {
+        token: localStorage.getItem(authKey),
+      },
+    });
+    return () => {
+      socketConnection.disconnect();
+    };
+  }, []);
   return (
     <Box>
       <Stack
