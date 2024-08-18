@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import io from "socket.io-client";
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
   const user = useAppSelector((state) => state.user);
+  console.log("user", user);
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const basePath = pathName === "/chat";
@@ -18,15 +19,19 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     dispatch(setUser(data?.data && data?.data));
   }
 
-  useEffect(() => {
-    refetch();
-  });
+  // useEffect(() => {
+  //   refetch();
+  // });
   // socket connection
   useEffect(() => {
     const socketConnection = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, {
       auth: {
         token: localStorage.getItem(authKey),
       },
+    });
+
+    socketConnection.on("onlineUser", (data) => {
+      console.log(data);
     });
     return () => {
       socketConnection.disconnect();
