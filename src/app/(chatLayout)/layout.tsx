@@ -3,7 +3,7 @@ import LeftSidebar from "@/components/UI/Chat/LeftSidebar";
 import { authKey } from "@/constants/auth";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setUser } from "@/redux/userSlice";
+import { setOnlineUser, setUser } from "@/redux/userSlice";
 import { Box, Stack } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -31,7 +31,8 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     });
 
     socketConnection.on("onlineUser", (data) => {
-      console.log(data);
+      // console.log(data);
+      dispatch(setOnlineUser(data));
     });
     return () => {
       socketConnection.disconnect();

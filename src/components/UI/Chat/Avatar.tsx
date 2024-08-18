@@ -1,10 +1,11 @@
 import { useAppSelector } from "@/redux/hooks";
 import React from "react";
 import { PiUserCircle } from "react-icons/pi";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
-  // const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
+  console.log("userid from avatar", userId);
+  const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
 
   let avatarName = "";
 
@@ -32,7 +33,8 @@ const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
 
   const randomNumber = Math.floor(Math.random() * 9);
 
-  //   const isOnline = onlineUser.includes(userId);
+  const isOnline = onlineUser.includes(userId);
+  console.log("is online", isOnline);
   return (
     <div
       className={`text-slate-800  rounded-full font-bold relative`}
@@ -58,9 +60,9 @@ const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
         <PiUserCircle size={width} />
       )}
 
-      {/* {isOnline && (
-        <div className="bg-green-600 p-1 absolute bottom-2 -right-1 z-10 rounded-full"></div>
-      )} */}
+      {isOnline && (
+        <div className="bg-green-600 p-1 absolute bottom-2 right-1 z-10 rounded-full"></div>
+      )}
     </div>
   );
 };
