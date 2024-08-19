@@ -5,8 +5,10 @@ import { authKey } from "./constants/auth";
 const AuthRoutes = ["/login", "/register"];
 const commonPrivateRoutes = ["/chat"];
 export function middleware(request: NextRequest) {
+  console.log("Console from middleware");
   const { pathname } = request.nextUrl;
   const accessToken = cookies().get(authKey)?.value;
+
   console.log("access", accessToken);
   if (!accessToken) {
     console.log("not access token");
@@ -24,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/chat/:path*"],
 };

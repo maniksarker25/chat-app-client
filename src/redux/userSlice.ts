@@ -7,8 +7,8 @@ interface UserState {
   email: string;
   profile_pic: string;
   token: string;
-  onlineUser: Array<string>; // Assuming onlineUser is an array of user IDs (strings), adjust if different
-  socketConnection: WebSocket | null; // Adjust type based on the socket library you're using
+  // onlineUser: Array<string>;
+  // socketConnection: any | null;
 }
 
 // Initial state
@@ -18,8 +18,8 @@ const initialState: UserState = {
   email: "",
   profile_pic: "",
   token: "",
-  onlineUser: [],
-  socketConnection: null,
+  // onlineUser: [],
+  // socketConnection: null,
 };
 
 export const userSlice = createSlice({
@@ -45,21 +45,20 @@ export const userSlice = createSlice({
       state.email = "";
       state.profile_pic = "";
       state.token = "";
-      state.socketConnection = null;
+      // state.socketConnection = null;
     },
     // Set online users
-    setOnlineUser: (state, action: PayloadAction<string[]>) => {
-      state.onlineUser = action.payload;
-    },
+    // setOnlineUser: (state, action: PayloadAction<string[]>) => {
+    //   state.onlineUser = action.payload;
+    // },
     // Set socket connection
-    setSocketConnection: (state, action: PayloadAction<WebSocket | null>) => {
-      state.socketConnection = action.payload;
-    },
+    // setSocketConnection: (state, action: PayloadAction<any | null>) => {
+    //   state.socketConnection = action.payload;
+    // },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setToken, logout, setOnlineUser, setSocketConnection } =
-  userSlice.actions;
+export const { setUser, setToken, logout } = userSlice.actions;
 
 export default userSlice.reducer;

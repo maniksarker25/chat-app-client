@@ -1,3 +1,4 @@
+import { useSocket } from "@/context/SocketContext";
 import { useAppSelector } from "@/redux/hooks";
 import React from "react";
 import { PiUserCircle } from "react-icons/pi";
@@ -5,7 +6,8 @@ import { useSelector } from "react-redux";
 
 const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
   console.log("userid from avatar", userId);
-  const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
+  // const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
+  const { onlineUser } = useSocket();
 
   let avatarName = "";
 

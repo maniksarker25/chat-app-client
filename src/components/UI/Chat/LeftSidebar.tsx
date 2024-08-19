@@ -6,11 +6,18 @@ import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
 import SearchUserModal from "./SearchUserModal";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/services/actions/logoutUser";
 const LeftSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const { data } = useGetMyProfileQuery(undefined);
   const [allUser, setAllUser] = useState([]);
+  const router = useRouter();
+  const handleLogout = () => {
+    logoutUser(router);
+    router.push("/login");
+  };
   return (
     <Stack direction={"row"}>
       <Box
@@ -61,6 +68,7 @@ const LeftSidebar = () => {
             />
             <EditProfileModal open={isModalOpen} setOpen={setIsModalOpen} />
             <LogoutIcon
+              onClick={handleLogout}
               sx={{
                 fontSize: "30px",
                 color: "#374151",
