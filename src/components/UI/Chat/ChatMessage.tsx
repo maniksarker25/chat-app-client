@@ -15,7 +15,7 @@ import { uploadFile } from "@/helpers/uploadFile/uploadFile";
 const ChatMessage = ({ userId }: { userId: string }) => {
   const { socket } = useSocket();
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
-  const [loading, isLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -44,6 +44,41 @@ const ChatMessage = ({ userId }: { userId: string }) => {
       return {
         ...preve,
         imageUrl: uploadPhoto.url,
+      };
+    });
+  };
+
+  // clear image
+  const handleClearUploadImage = () => {
+    setMessage((preve) => {
+      return {
+        ...preve,
+        imageUrl: "",
+      };
+    });
+  };
+  // handle upload video
+  const handleUploadVideo = async (e: any) => {
+    const file = e.target.files[0];
+
+    setLoading(true);
+    const uploadPhoto = await uploadFile(file);
+    setLoading(false);
+    setOpenImageVideoUpload(false);
+
+    setMessage((preve) => {
+      return {
+        ...preve,
+        videoUrl: uploadPhoto.url,
+      };
+    });
+  };
+  // clear video
+  const handleClearUploadVideo = () => {
+    setMessage((preve) => {
+      return {
+        ...preve,
+        videoUrl: "",
       };
     });
   };
