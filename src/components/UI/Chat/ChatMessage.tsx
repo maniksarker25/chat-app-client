@@ -11,9 +11,11 @@ import { useEffect, useState } from "react";
 import backgroundImage from "../../../../public/wallapaper.jpeg";
 import Link from "next/link";
 import Avatar from "./Avatar";
+import { uploadFile } from "@/helpers/uploadFile/uploadFile";
 const ChatMessage = ({ userId }: { userId: string }) => {
   const { socket } = useSocket();
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
+  const [loading, isLoading] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -21,8 +23,29 @@ const ChatMessage = ({ userId }: { userId: string }) => {
     online: false,
     _id: "",
   });
+  const [message, setMessage] = useState({
+    text: "",
+    imageUrl: "",
+    videoUrl: "",
+  });
   const handleUploadImageVideoOpen = () => {
     setOpenImageVideoUpload((preve) => !preve);
+  };
+  // handle upload image
+  const handleUploadImage = async (e: any) => {
+    const file = e.target.files[0];
+
+    setLoading(true);
+    const uploadPhoto = await uploadFile(file);
+    setLoading(false);
+    setOpenImageVideoUpload(false);
+
+    setMessage((preve) => {
+      return {
+        ...preve,
+        imageUrl: uploadPhoto.url,
+      };
+    });
   };
   // console.log("user data", userData);
   useEffect(() => {
