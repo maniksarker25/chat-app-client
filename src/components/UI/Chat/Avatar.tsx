@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
   console.log("userid from avatar", userId);
   // const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
-  const { onlineUser } = useSocket();
+  // const { onlineUser } = useSocket();
 
   let avatarName = "";
 
@@ -35,8 +35,7 @@ const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
 
   const randomNumber = Math.floor(Math.random() * 9);
 
-  const isOnline = onlineUser.includes(userId);
-  console.log("is online", isOnline);
+  // const isOnline = onlineUser.includes(userId);
   return (
     <div
       className={`text-slate-800  rounded-full font-bold relative`}
@@ -61,10 +60,10 @@ const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
       ) : (
         <PiUserCircle size={width} />
       )}
-
+      {/* 
       {isOnline && (
         <div className="bg-green-600 p-1 absolute bottom-2 right-1 z-10 rounded-full"></div>
-      )}
+      )} */}
     </div>
   );
 };
