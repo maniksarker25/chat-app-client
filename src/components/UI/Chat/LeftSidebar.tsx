@@ -3,21 +3,31 @@ import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EditProfileModal from "./EditProfileModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
 import SearchUserModal from "./SearchUserModal";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/services/actions/logoutUser";
+import { useSocket } from "@/context/SocketContext";
 const LeftSidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
   const { data } = useGetMyProfileQuery(undefined);
+  const user = data?.data;
+  const { socket } = useSocket();
   const [allUser, setAllUser] = useState([]);
   const router = useRouter();
   const handleLogout = () => {
     logoutUser(router);
     router.push("/login");
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit("sidebar", user?._id);
+    }
+  }, []);
+
   return (
     <Stack direction={"row"}>
       <Box
