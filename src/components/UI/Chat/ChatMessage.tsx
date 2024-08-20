@@ -8,13 +8,19 @@ import { FaImage } from "react-icons/fa6";
 import { FaVideo } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import { IoMdSend } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
 import backgroundImage from "../../../../public/wallapaper.jpeg";
 import Link from "next/link";
 import Avatar from "./Avatar";
 import { uploadFile } from "@/helpers/uploadFile/uploadFile";
+import { useGetMyProfileQuery } from "@/redux/api/userApi";
 const ChatMessage = ({ userId }: { userId: string }) => {
   const { socket } = useSocket();
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
+  const { data } = useGetMyProfileQuery(undefined);
+  const user = data?.data;
+  console.log(user);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -95,6 +101,38 @@ const ChatMessage = ({ userId }: { userId: string }) => {
     }
   }, [socket, userId]);
 
+  const handleOnChange = (e: any) => {
+    const { name, value } = e.target;
+    setMessage((preve) => {
+      return {
+        ...preve,
+        text: value,
+      };
+    });
+  };
+
+  const handleSendMessage = (e: any) => {
+    e.preventDefault();
+
+    if (message.text || message.imageUrl || message.videoUrl) {
+      if (socket) {
+        socket.emit("new message", {
+          sender: user?._id,
+          receiver: userId,
+          text: message.text,
+          imageUrl: message.imageUrl,
+          videoUrl: message.videoUrl,
+          msgByUserId: user?._id,
+        });
+        setMessage({
+          text: "",
+          imageUrl: "",
+          videoUrl: "",
+        });
+      }
+    }
+  };
+
   return (
     <div
       style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -137,7 +175,51 @@ const ChatMessage = ({ userId }: { userId: string }) => {
 
       {/* show all messages */}
       <section className="h-[calc(100vh-128px)]  overflow-x-hidden overflow-y-scroll scrollbar">
-        shwo all messages
+        {/**upload Image display */}
+        {message.imageUrl && (
+          <div className="w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden">
+            <div
+              className="w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-red-600"
+              onClick={handleClearUploadImage}
+            >
+              <IoClose size={30} />
+            </div>
+            <div className="bg-white p-3">
+              <img
+                src={message.imageUrl}
+                alt="uploadImage"
+                className="aspect-square w-full h-full max-w-sm m-2 object-scale-down"
+              />
+            </div>
+          </div>
+        )}
+
+        {/**upload video display */}
+        {message.videoUrl && (
+          <div className="w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden">
+            <div
+              className="w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-red-600"
+              onClick={handleClearUploadVideo}
+            >
+              <IoClose size={30} />
+            </div>
+            <div className="bg-white p-3">
+              <video
+                src={message.videoUrl}
+                className="aspect-square w-full h-full max-w-sm m-2 object-scale-down"
+                controls
+                muted
+                autoPlay
+              />
+            </div>
+          </div>
+        )}
+
+        {loading && (
+          <div className="w-full h-full flex sticky bottom-0 justify-center items-center">
+            <p>Loading...</p>
+          </div>
+        )}
       </section>
       {/* send message */}
       <section className="h-16 bg-white flex items-center">
@@ -174,19 +256,36 @@ const ChatMessage = ({ userId }: { userId: string }) => {
               <input
                 type="file"
                 id="uploadImage"
-                // onChange={handleUploadImage}
+                onChange={handleUploadImage}
                 className="hidden"
               />
 
               <input
                 type="file"
                 id="uploadVideo"
-                // onChange={handleUploadVideo}
+                onChange={handleUploadVideo}
                 className="hidden"
               />
             </form>
           </div>
         )}
+
+        {/**input box */}
+        <form
+          className="h-full w-full flex gap-2 "
+          onSubmit={handleSendMessage}
+        >
+          <input
+            type="text"
+            placeholder="Type here message..."
+            className="py-1 px-4 outline-none w-full h-full"
+            value={message.text}
+            onChange={handleOnChange}
+          />
+          <button className="text-primary hover:text-secondary pr-6">
+            <IoMdSend size={28} />
+          </button>
+        </form>
       </section>
     </div>
   );
