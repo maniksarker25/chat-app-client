@@ -16,13 +16,24 @@ import Avatar from "./Avatar";
 import { uploadFile } from "@/helpers/uploadFile/uploadFile";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
 import moment from "moment";
+interface IMessage {
+  _id: string;
+  text: string;
+  imageUrl: string;
+  videoUrl: string;
+  seen: boolean;
+  msgByUserId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const ChatMessage = ({ userId }: { userId: string }) => {
   const { socket } = useSocket();
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
   const { data } = useGetMyProfileQuery(undefined);
   const user = data?.data;
   const [loading, setLoading] = useState(false);
-  const [allMessage, setAllMessage] = useState([]);
+  const [allMessage, setAllMessage] = useState<IMessage[]>([]);
   const currentMessage = useRef<HTMLDivElement | null>(null);
   const [userData, setUserData] = useState({
     name: "",
