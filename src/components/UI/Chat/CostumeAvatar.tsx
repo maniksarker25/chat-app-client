@@ -4,7 +4,21 @@ import React from "react";
 import { PiUserCircle } from "react-icons/pi";
 import { useSelector } from "react-redux";
 
-const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
+type TAvatarProps = {
+  userId?: string;
+  name?: string;
+  imageUrl?: string;
+  width?: number;
+  height?: number;
+};
+
+const CostumeAvatar = ({
+  userId,
+  name,
+  imageUrl,
+  width,
+  height,
+}: TAvatarProps) => {
   console.log("userid from avatar", userId);
   // const onlineUser = useAppSelector((state) => state?.user?.onlineUser);
   // const { onlineUser } = useSocket();
@@ -68,4 +82,4 @@ const Avatar = ({ userId, name, imageUrl, width, height }: any) => {
   );
 };
 
-export default Avatar;
+export default CostumeAvatar;

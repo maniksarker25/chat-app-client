@@ -12,7 +12,7 @@ import { IoMdSend } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import backgroundImage from "../../../../public/wallapaper.jpeg";
 import Link from "next/link";
-import Avatar from "./Avatar";
+import CostumeAvatar from "./CostumeAvatar";
 import { uploadFile } from "@/helpers/uploadFile/uploadFile";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
 import moment from "moment";
@@ -171,7 +171,7 @@ const ChatMessage = ({ userId }: { userId: string }) => {
             <FaAngleLeft size={25} />
           </Link>
           <div>
-            <Avatar
+            <CostumeAvatar
               width={50}
               height={50}
               imageUrl={userData?.profile_pic}

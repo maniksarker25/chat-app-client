@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Avatar from "./Avatar";
+import CostumeAvatar from "./CostumeAvatar";
 
 const UserSearchCard = ({ user, setOpen }: any) => {
   return (
@@ -11,7 +11,7 @@ const UserSearchCard = ({ user, setOpen }: any) => {
     >
       <div>
         <div>
-          <Avatar
+          <CostumeAvatar
             width={50}
             height={50}
             name={user?.name}
