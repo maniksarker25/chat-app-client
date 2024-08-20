@@ -20,7 +20,6 @@ const ChatMessage = ({ userId }: { userId: string }) => {
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
   const { data } = useGetMyProfileQuery(undefined);
   const user = data?.data;
-  console.log(user);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     name: "",
@@ -97,6 +96,10 @@ const ChatMessage = ({ userId }: { userId: string }) => {
       socket.on("message-user", (data) => {
         // console.log("user details", data);
         setUserData(data);
+      });
+      // get message
+      socket.on("message", (data) => {
+        console.log("messages", data);
       });
     }
   }, [socket, userId]);
