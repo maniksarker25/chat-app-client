@@ -7,7 +7,7 @@ import { HiDotsVertical } from "react-icons/hi";
 import { FaImage } from "react-icons/fa6";
 import { FaVideo } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import backgroundImage from "../../../../public/wallapaper.jpeg";
@@ -15,12 +15,15 @@ import Link from "next/link";
 import Avatar from "./Avatar";
 import { uploadFile } from "@/helpers/uploadFile/uploadFile";
 import { useGetMyProfileQuery } from "@/redux/api/userApi";
+import moment from "moment";
 const ChatMessage = ({ userId }: { userId: string }) => {
   const { socket } = useSocket();
   const [openImageVideoUpload, setOpenImageVideoUpload] = useState(false);
   const { data } = useGetMyProfileQuery(undefined);
   const user = data?.data;
   const [loading, setLoading] = useState(false);
+  const [allMessage, setAllMessage] = useState([]);
+  const currentMessage = useRef<HTMLDivElement | null>(null);
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -33,6 +36,15 @@ const ChatMessage = ({ userId }: { userId: string }) => {
     imageUrl: "",
     videoUrl: "",
   });
+
+  useEffect(() => {
+    if (currentMessage.current) {
+      currentMessage.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [allMessage]);
   const handleUploadImageVideoOpen = () => {
     setOpenImageVideoUpload((preve) => !preve);
   };
@@ -100,6 +112,7 @@ const ChatMessage = ({ userId }: { userId: string }) => {
       // get message
       socket.on("message", (data) => {
         console.log("messages", data);
+        setAllMessage(data);
       });
     }
   }, [socket, userId]);
@@ -178,6 +191,42 @@ const ChatMessage = ({ userId }: { userId: string }) => {
 
       {/* show all messages */}
       <section className="h-[calc(100vh-128px)]  overflow-x-hidden overflow-y-scroll scrollbar">
+        {/**all message show here */}
+        <div className="flex flex-col gap-2 py-2 mx-2" ref={currentMessage}>
+          {allMessage.map((msg, index) => {
+            return (
+              <div
+                key={index}
+                className={` p-1 py-1 rounded w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${
+                  user._id === msg?.msgByUserId
+                    ? "ml-auto bg-teal-100"
+                    : "bg-white"
+                }`}
+              >
+                <div className="w-full relative">
+                  {msg?.imageUrl && (
+                    <img
+                      src={msg?.imageUrl}
+                      className="w-full h-full object-scale-down"
+                    />
+                  )}
+                  {msg?.videoUrl && (
+                    <video
+                      src={msg.videoUrl}
+                      className="w-full h-full object-scale-down"
+                      controls
+                    />
+                  )}
+                </div>
+                <p className="px-2">{msg.text}</p>
+                <p className="text-xs ml-auto w-fit">
+                  {moment(msg.createdAt).format("hh:mm")}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
         {/**upload Image display */}
         {message.imageUrl && (
           <div className="w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden">
