@@ -25,8 +25,11 @@ const LeftSidebar = () => {
   useEffect(() => {
     if (socket) {
       socket.emit("sidebar", user?._id);
+      socket.on("conversation", (data) => {
+        console.log("conversation", data);
+      });
     }
-  }, []);
+  }, [socket, user]);
 
   return (
     <Stack direction={"row"}>
