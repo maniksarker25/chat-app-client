@@ -262,8 +262,8 @@ const LeftSidebar = () => {
                         </div>
                       )}
                     </div>
-                    <p className="text-ellipsis line-clamp-1">
-                      {conv?.lastMsg?.text}
+                    <p className="text-ellipsis line-clamp-1 ">
+                      {conv?.lastMsg?.text?.slice(0, 25) + "..."}
                     </p>
                   </div>
                 </div>
