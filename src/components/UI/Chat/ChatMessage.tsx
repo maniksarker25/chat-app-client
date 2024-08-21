@@ -116,6 +116,7 @@ const ChatMessage = ({ userId }: { userId: string }) => {
       // console.log("run useEffect", userId);
       // Emit event to server
       socket.emit("message-page", userId);
+      socket.emit("seen", userId);
       socket.on("message-user", (data) => {
         // console.log("user details", data);
         setUserData(data);
